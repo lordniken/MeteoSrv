@@ -1,0 +1,1 @@
+export { MeteoController } from './meteoController';
