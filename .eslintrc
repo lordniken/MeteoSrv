@@ -5,14 +5,30 @@
     "node": true
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint/eslint-plugin", "prettier"],
+  "plugins": ["@typescript-eslint/eslint-plugin", "prettier", "import"],
   "extends": [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
   "rules": {
+    "@typescript-eslint/interface-name-prefix": "off",
     "prettier/prettier": ["error", { "singleQuote": true }],
-    "@typescript-eslint/interface-name-prefix": "off"
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "pathGroupsExcludedImportTypes": ["internal"],
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "object",
+          "index"
+        ]
+      }
+    ]
   }
 }
