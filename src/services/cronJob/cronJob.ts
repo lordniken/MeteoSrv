@@ -1,4 +1,4 @@
-import { MeteoController } from '../meteoController';
+import { MeteoController } from '../MeteoController';
 
 export class CronJob {
   static readonly schedule = '1 * * * * *';
@@ -14,8 +14,12 @@ export class CronJob {
   }
 
   static async run() {
-    const meteoData = await CronJob.getMeteoData();
+    try {
+      const meteoData = await CronJob.getMeteoData();
 
-    console.log(meteoData, new Date());
+      console.log(meteoData, new Date());
+    } catch (error) {
+      console.log('Error while receiving meteo data: ', error);
+    }
   }
 }

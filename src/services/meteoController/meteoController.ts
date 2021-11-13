@@ -1,6 +1,6 @@
 import { Socket } from 'net';
 
-export interface IMeteoControllerData {
+interface IMeteoControllerData {
   hallTemp: string;
   hallHumi: string;
   boilerTemp: string;

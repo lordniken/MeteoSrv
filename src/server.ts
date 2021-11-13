@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cron from 'node-cron';
 import { createConnection } from 'typeorm';
 
-import { CronJob } from './services/cronJob';
+import { CronJob } from './services/CronJob';
 
 dotenv.config();
 

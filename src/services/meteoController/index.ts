@@ -1,1 +1,1 @@
-export { MeteoController } from './meteoController';
+export { MeteoController } from './MeteoController';
