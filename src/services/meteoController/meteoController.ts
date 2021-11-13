@@ -1,51 +1,62 @@
 import { Socket } from 'net';
 
+import { Sensors } from '../../constants';
+
 interface IMeteoControllerData {
-  hallTemp: string;
-  hallHumi: string;
-  boilerTemp: string;
-  inletTemp: string;
+  id: Sensors;
+  temp: string;
+  humi?: string;
 }
 
 export class MeteoController {
   ip: string;
   port: number;
+  data: string;
 
   constructor(ip: string, port: number) {
     this.port = port;
     this.ip = ip;
   }
 
-  parseData(data: string): IMeteoControllerData {
-    const matches = data.match(/^T1=(.*)H1=(.*)T2=(.*)T3=(.*)DEBUG=(\d)/);
+  parseData(): IMeteoControllerData[] {
+    const matches = this.data.match(/^T1=(.*)H1=(.*)T2=(.*)T3=(.*)DEBUG=(\d)/);
 
     if (matches) {
       const [, hallTemp, hallHumi, inletTemp, boilerTemp] = matches;
 
-      return {
-        hallTemp,
-        hallHumi,
-        boilerTemp,
-        inletTemp,
-      };
+      return [
+        {
+          id: Sensors.hall,
+          temp: hallTemp,
+          humi: hallHumi,
+        },
+        {
+          id: Sensors.inlet,
+          temp: inletTemp,
+        },
+        {
+          id: Sensors.boiler,
+          temp: boilerTemp,
+        },
+      ];
     }
 
-    throw new Error(`Error while parsing data: ${data}`);
+    throw new Error(`Error while parsing data: ${this.data}`);
   }
 
   requestData(): Promise<string> {
     return new Promise((resolve, reject) => {
       const client = new Socket();
-      let data = '';
+      this.data = '';
 
       client.connect(this.port, this.ip);
 
       client.on('data', (clientData) => {
-        data += clientData;
+        this.data += clientData;
       });
 
       client.on('close', () => {
-        resolve(data);
+        resolve(this.data);
       });
 
       client.on('error', (e) => {
