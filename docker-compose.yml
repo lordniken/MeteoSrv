@@ -14,7 +14,7 @@ services:
     build: db/
     restart: always
     ports: 
-      - '5432:5432'
+      - '9801:5432'
     volumes:
       - ./data:/data
     environment:
