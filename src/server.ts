@@ -4,11 +4,15 @@ import cron from 'node-cron';
 import { createConnection } from 'typeorm';
 
 import { CronJob } from './services/CronJob';
+import { router } from './controllers';
 
 dotenv.config();
 
 const port = process.env.PORT || 5000;
 const app = express();
+
+app.use(express.json());
+app.use('/', router);
 
 const init = async () => {
   try {

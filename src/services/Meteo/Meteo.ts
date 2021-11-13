@@ -41,7 +41,7 @@ export class Meteo {
         return {
           temp: data?.temp,
           humi: data?.humidity,
-          update: new Date(data?.created || ''),
+          update: new Date(data?.created || '').getTime(),
         };
       }),
     );
