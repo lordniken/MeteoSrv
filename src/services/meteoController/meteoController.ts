@@ -2,61 +2,54 @@ import { Socket } from 'net';
 
 import { Sensors } from '../../constants';
 
-interface IMeteoControllerData {
-  id: Sensors;
-  temp: string;
-  humi?: string;
+export interface IMeteoControllerData {
+  sensorId: Sensors;
+  temp: number;
+  humidity: number | null;
 }
 
 export class MeteoController {
-  ip: string;
-  port: number;
-  data: string;
-
-  constructor(ip: string, port: number) {
-    this.port = port;
-    this.ip = ip;
-  }
-
-  parseData(): IMeteoControllerData[] {
-    const matches = this.data.match(/^T1=(.*)H1=(.*)T2=(.*)T3=(.*)DEBUG=(\d)/);
+  static parse(data: string): IMeteoControllerData[] {
+    const matches = data.match(/^T1=(.*)H1=(.*)T2=(.*)T3=(.*)DEBUG=(\d)/);
 
     if (matches) {
       const [, hallTemp, hallHumi, inletTemp, boilerTemp] = matches;
 
       return [
         {
-          id: Sensors.hall,
-          temp: hallTemp,
-          humi: hallHumi,
+          sensorId: Sensors.hall,
+          temp: Number(hallTemp),
+          humidity: Number(hallHumi),
         },
         {
-          id: Sensors.inlet,
-          temp: inletTemp,
+          sensorId: Sensors.inlet,
+          temp: Number(inletTemp),
+          humidity: null,
         },
         {
-          id: Sensors.boiler,
-          temp: boilerTemp,
+          sensorId: Sensors.boiler,
+          temp: Number(boilerTemp),
+          humidity: null,
         },
       ];
     }
 
-    throw new Error(`Error while parsing data: ${this.data}`);
+    throw new Error(`Error while parsing data: ${data}`);
   }
 
-  requestData(): Promise<string> {
+  static request(ip: string, port: number): Promise<string> {
     return new Promise((resolve, reject) => {
       const client = new Socket();
-      this.data = '';
+      let data = '';
 
-      client.connect(this.port, this.ip);
+      client.connect(port, ip);
 
       client.on('data', (clientData) => {
-        this.data += clientData;
+        data += clientData;
       });
 
       client.on('close', () => {
-        resolve(this.data);
+        resolve(data);
       });
 
       client.on('error', (e) => {
