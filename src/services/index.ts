@@ -1,1 +1,0 @@
-export { MeteoController } from './meteoController';
