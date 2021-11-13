@@ -1,7 +1,7 @@
 import { Meteo } from '../Meteo';
 
 export class CronJob {
-  static readonly schedule = '1 * * * * *';
+  static readonly schedule = '3 * * * * *';
 
   static async run() {
     try {
