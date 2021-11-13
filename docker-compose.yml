@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  br_srv:
+    container_name: br_srv
+    build: server/
+    restart: always
+    ports: 
+      - '9800:9800'
+    links:
+      - br_postgres
+  br_postgres:
+    container_name: br_pg
+    build: db/
+    restart: always
+    ports: 
+      - '5432:5432'
+    volumes:
+      - ./data:/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: postgres
+      POSTGRES_DB: brHome
