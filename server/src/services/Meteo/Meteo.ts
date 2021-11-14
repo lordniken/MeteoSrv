@@ -2,7 +2,7 @@ import { getRepository } from 'typeorm';
 
 import { MeteoController, IMeteoControllerData } from '../MeteoController';
 import { Meteo as MeteoEntity } from '../../entities';
-import { Sensors } from '../../constants';
+import { Sensors, ExtremeValues } from '../../constants';
 
 export class Meteo {
   private static repository() {
@@ -20,9 +20,14 @@ export class Meteo {
 
   static async store(meteoData: IMeteoControllerData[]) {
     meteoData.forEach(async (data) => {
-      const newMeteoData = await Meteo.repository().create(data);
+      if (
+        data.temp > ExtremeValues.minimumTemp &&
+        data.temp < ExtremeValues.maximumTemp
+      ) {
+        const newMeteoData = await Meteo.repository().create(data);
 
-      await Meteo.repository().save(newMeteoData);
+        await Meteo.repository().save(newMeteoData);
+      }
     });
   }
 

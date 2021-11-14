@@ -9,6 +9,10 @@ export interface IMeteoControllerData {
 }
 
 export class MeteoController {
+  static round(value: string): number {
+    return Math.round(Number(value) * 10) / 10;
+  }
+
   static parse(data: string): IMeteoControllerData[] {
     const matches = data.match(/^T1=(.*)H1=(.*)T2=(.*)T3=(.*)DEBUG=(\d)/);
 
@@ -18,17 +22,17 @@ export class MeteoController {
       return [
         {
           sensorId: Sensors.hall,
-          temp: Number(hallTemp),
-          humidity: Number(hallHumi),
+          temp: MeteoController.round(hallTemp),
+          humidity: MeteoController.round(hallHumi),
         },
         {
           sensorId: Sensors.inlet,
-          temp: Number(inletTemp),
+          temp: MeteoController.round(inletTemp),
           humidity: null,
         },
         {
           sensorId: Sensors.boiler,
-          temp: Number(boilerTemp),
+          temp: MeteoController.round(boilerTemp),
           humidity: null,
         },
       ];
