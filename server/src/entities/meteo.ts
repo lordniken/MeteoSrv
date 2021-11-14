@@ -2,7 +2,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  UpdateDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -19,6 +19,6 @@ export class Meteo {
   @Column('numeric', { default: null })
   humidity: number | null;
 
-  @UpdateDateColumn({ type: 'timestamp' })
-  created: number;
+  @CreateDateColumn()
+  created: Date;
 }

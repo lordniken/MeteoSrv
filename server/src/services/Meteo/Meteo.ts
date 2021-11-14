@@ -42,11 +42,12 @@ export class Meteo {
           where: { sensorId },
           order: { created: 'DESC' },
         });
+        const update = Math.floor(Number(data?.created) / 1000);
 
         return {
           temp: data?.temp,
           humi: data?.humidity,
-          update: new Date(data?.created || '').getTime(),
+          update,
         };
       }),
     );
