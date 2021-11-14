@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { Between, getRepository } from 'typeorm';
 
 import { MeteoController, IMeteoControllerData } from '../MeteoController';
 import { Meteo as MeteoEntity } from '../../entities';
@@ -52,5 +52,20 @@ export class Meteo {
     );
 
     return lastSensorsData;
+  }
+
+  static async getChartData(
+    startDate: Date,
+    endDate: Date,
+    sensorId: number,
+  ): Promise<MeteoEntity[]> {
+    const data = await Meteo.repository().find({
+      where: {
+        created: Between(startDate, endDate),
+        sensorId,
+      },
+    });
+
+    return data;
   }
 }
