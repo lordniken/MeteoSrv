@@ -18,6 +18,6 @@ export const requestChart = async (
   return chartData.map((data) => ({
     temp: data.temp,
     humi: data.humidity || 0, // mobile app crashes if return null :-(
-    time: new Date(data.created).toLocaleString('ru'),
+    time: data.created.toLocaleString('ru'),
   }));
 };
