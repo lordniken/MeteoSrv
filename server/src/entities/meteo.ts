@@ -19,6 +19,6 @@ export class Meteo {
   @Column('numeric', { default: null })
   humidity: number | null;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   created: Date;
 }
