@@ -19,7 +19,7 @@ jobs:
           echo PORT=${{ secrets.PORT }} >> server/.env
           echo METEO_CONTROLLER_IP=${{ secrets.METEO_CONTROLLER_IP }} >> server/.env
           echo METEO_CONTROLLER_PORT=${{ secrets.METEO_CONTROLLER_PORT }} >> server/.env
-          echo DB_HOST=br_postgres >> server/.env
+          echo DB_HOST=${{ secrets.DB_HOST }} >> server/.env
           echo DB_PORT=9801 >> server/.env
           echo DB_USER=${{ secrets.DB_USER }} >> server/.env
           echo DB_PWD= >> server/.env
