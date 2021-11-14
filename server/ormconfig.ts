@@ -1,8 +1,6 @@
 import { ConnectionOptions } from 'typeorm';
 import dotenv from 'dotenv';
 
-import { Meteo } from './src/entities';
-
 dotenv.config();
 
 const ormConfig: ConnectionOptions = {
@@ -13,7 +11,7 @@ const ormConfig: ConnectionOptions = {
   password: process.env.DB_PWD,
   database: process.env.DB_NAME,
   synchronize: true,
-  entities: [Meteo],
+  entities: ['src/entities/*.{j,t}s'],
   migrations: ['src/migrations/*.ts'],
 };
 
