@@ -16,8 +16,8 @@ export const requestChart = async (
   const chartData = await Meteo.getChartData(startDate, endDate, sensorId);
 
   return chartData.map((data) => ({
-    temp: data?.temp,
-    humi: data?.humidity,
-    time: new Date(data?.created || '').getTime(),
+    temp: data.temp,
+    humi: data.humidity || 0, // mobile app crashes if return null :-(
+    time: new Date(data.created).getTime(),
   }));
 };
