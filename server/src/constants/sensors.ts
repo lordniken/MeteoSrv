@@ -1,7 +1,7 @@
 export enum Sensors {
   hall = 0,
-  boiler = 1,
-  inlet = 2,
+  inlet = 1,
+  boiler = 2,
 }
 
 export enum ExtremeValues {
