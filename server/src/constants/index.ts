@@ -1,1 +1,1 @@
-export { Sensors } from './sensors';
+export { Sensors, ExtremeValues } from './sensors';
