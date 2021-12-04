@@ -1,6 +1,7 @@
 import { getRepository } from 'typeorm';
+import { format, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 
-import { NOTIFICATION_TYPES } from '../../constants';
+import { NOTIFICATION_TYPES, TIMEZONE } from '../../constants';
 import { Notifications as NotificationsEntity } from '../../entities';
 
 export class Notification {
@@ -23,7 +24,11 @@ export class Notification {
       order: { time: 'DESC' },
     });
     // Mobile app requires strings instead of null :-(
-    const time = data ? Math.floor(Number(data?.time) / 1000) : '';
+    const time = data
+      ? format(utcToZonedTime(data.time, TIMEZONE), 'dd.MM.yyyy - HH:mm', {
+          timeZone: TIMEZONE,
+        })
+      : '';
 
     return {
       id: data?.id ?? '',
