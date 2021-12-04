@@ -7,15 +7,25 @@ export interface ISetting {
   value: number;
 }
 
+export interface IReadSettings {
+  [key: string]: number;
+}
+
 export class Settings {
   private static get repository() {
     return getRepository(SettingsEntity);
   }
 
-  static async read() {
+  static async read(): Promise<IReadSettings> {
     const data = await Settings.repository.find({ select: ['key', 'value'] });
+    const settings = data.reduce((acc, setting) => {
+      return {
+        ...acc,
+        [setting.key]: setting.value,
+      };
+    }, {});
 
-    return data;
+    return settings;
   }
 
   static async write(settings: ISetting[]) {

@@ -1,1 +1,1 @@
-export { Settings, ISetting } from './Settings';
+export { Settings, ISetting, IReadSettings } from './Settings';

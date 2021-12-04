@@ -48,6 +48,7 @@ export class Meteo {
           temp: data?.temp,
           humi: data?.humidity,
           update,
+          sensorId,
         };
       }),
     );
