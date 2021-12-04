@@ -5,6 +5,7 @@ import { Routes } from '../constants';
 import { requestChart } from './chart';
 import { ISettingsParams, requestSettings, updateSettings } from './settings';
 import { requestStatus } from './status';
+import { removeNotification } from './notification';
 
 const router = express.Router();
 
@@ -33,11 +34,13 @@ router.get('/', async (req, res) => {
       const args = params as unknown as ISettingsParams;
       await updateSettings(args);
 
-      return res.status(200);
+      return res.status(200).json();
     }
 
     case Routes.removeNotification: {
-      return res.status(200);
+      await removeNotification(Number(req.query.id));
+
+      return res.status(200).json();
     }
 
     default: {
