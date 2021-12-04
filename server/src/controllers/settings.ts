@@ -1,13 +1,28 @@
-export const requestSettings = () => {
-  return {
-    d0min: 0,
-    d0max: 100,
-    d1min: 1,
-    d1max: 101,
-    d2min: 2,
-    d2max: 102,
-    tout: 5,
-    tbtwnalarms: 6,
-    refresh: 5,
-  };
+import { Settings } from '../services/Settings';
+
+export const requestSettings = async () => {
+  const data = await Settings.read();
+  const settings = data.reduce((acc, setting) => {
+    return {
+      ...acc,
+      [setting.key]: setting.value,
+    };
+  }, {});
+
+  return settings;
+};
+
+export interface ISettingsParams {
+  [key: string]: number;
+}
+
+export const updateSettings = async (params: ISettingsParams) => {
+  const settings = Object.keys(params).map((key: string) => ({
+    key,
+    value: Number(params[key]),
+  }));
+
+  await Settings.write(settings);
+
+  return null;
 };

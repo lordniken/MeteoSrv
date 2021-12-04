@@ -5,7 +5,7 @@ import { Meteo as MeteoEntity } from '../../entities';
 import { Sensors, ExtremeValues } from '../../constants';
 
 export class Meteo {
-  private static repository() {
+  private static get repository() {
     return getRepository(MeteoEntity);
   }
 
@@ -24,9 +24,9 @@ export class Meteo {
         data.temp > ExtremeValues.minimumTemp &&
         data.temp < ExtremeValues.maximumTemp
       ) {
-        const newMeteoData = await Meteo.repository().create(data);
+        const newMeteoData = await Meteo.repository.create(data);
 
-        await Meteo.repository().save(newMeteoData);
+        await Meteo.repository.save(newMeteoData);
       }
     });
   }
@@ -38,7 +38,7 @@ export class Meteo {
 
     const lastSensorsData = await Promise.all(
       sensors.map(async (sensorId) => {
-        const data = await Meteo.repository().findOne({
+        const data = await Meteo.repository.findOne({
           where: { sensorId },
           order: { created: 'DESC' },
         });
@@ -60,7 +60,7 @@ export class Meteo {
     endDate: Date,
     sensorId: number,
   ): Promise<MeteoEntity[]> {
-    const data = await Meteo.repository().find({
+    const data = await Meteo.repository.find({
       where: {
         created: Between(startDate, endDate),
         sensorId,
