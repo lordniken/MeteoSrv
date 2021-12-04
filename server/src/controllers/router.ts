@@ -3,7 +3,7 @@ import express from 'express';
 import { Routes } from '../constants';
 
 import { requestChart } from './chart';
-import { requestSettings } from './settings';
+import { ISettingsParams, requestSettings, updateSettings } from './settings';
 import { requestStatus } from './status';
 
 const router = express.Router();
@@ -23,6 +23,15 @@ router.get('/', async (req, res) => {
 
     case Routes.settings: {
       const settings = await requestSettings();
+
+      return res.status(200).json(settings);
+    }
+
+    case Routes.saveSettings: {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { action, ...params } = req.query;
+      const args = params as unknown as ISettingsParams;
+      const settings = await updateSettings(args);
 
       return res.status(200).json(settings);
     }
