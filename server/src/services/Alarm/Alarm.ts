@@ -1,6 +1,8 @@
 import { Meteo } from '../Meteo';
 import { IMeteoControllerData } from '../MeteoController';
 import { IReadSettings, Settings } from '../Settings';
+import { Notification } from '../Notification';
+import { NOTIFICATION_TYPES } from '../../constants';
 
 const SECONDS_IN_MINUTE = 60;
 const SECONDS_IN_HOUR = SECONDS_IN_MINUTE * 60;
@@ -47,12 +49,14 @@ export class Alarm {
 
       data.forEach((meteo) => {
         if (Alarm.isCriticalTemperature(meteo, settings)) {
-          console.log('alarm temp');
+          Notification.create(NOTIFICATION_TYPES.sensors);
+
           Alarm.lastAlarm = Alarm.datetime;
         }
 
         if (Alarm.isTimeoutAlarm(meteo, settings.timeout)) {
-          console.log('alarm timeout');
+          Notification.create(NOTIFICATION_TYPES.timeout);
+
           Alarm.lastAlarm = Alarm.datetime;
         }
       });
