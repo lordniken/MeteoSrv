@@ -31,9 +31,13 @@ router.get('/', async (req, res) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { action, ...params } = req.query;
       const args = params as unknown as ISettingsParams;
-      const settings = await updateSettings(args);
+      await updateSettings(args);
 
-      return res.status(200).json(settings);
+      return res.status(200);
+    }
+
+    case Routes.removeNotification: {
+      return res.status(200);
     }
 
     default: {

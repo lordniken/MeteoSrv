@@ -1,13 +1,7 @@
 import { Settings } from '../services/Settings';
 
 export const requestSettings = async () => {
-  const data = await Settings.read();
-  const settings = data.reduce((acc, setting) => {
-    return {
-      ...acc,
-      [setting.key]: setting.value,
-    };
-  }, {});
+  const settings = await Settings.read();
 
   return settings;
 };
