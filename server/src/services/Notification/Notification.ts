@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { format, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+import { format, utcToZonedTime } from 'date-fns-tz';
 
 import { NOTIFICATION_TYPES, TIMEZONE } from '../../constants';
 import { Notifications as NotificationsEntity } from '../../entities';
