@@ -11,12 +11,14 @@ export interface ISettingsParams {
 }
 
 export const updateSettings = async (params: ISettingsParams) => {
+  /*
   const settings = Object.keys(params).map((key: string) => ({
     key,
     value: Number(params[key]),
   }));
 
   await Settings.write(settings);
+  */
 
   return null;
 };
