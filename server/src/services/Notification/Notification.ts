@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 import { format, utcToZonedTime } from 'date-fns-tz';
+import { Telegraf } from 'telegraf';
 
 import {
   NOTIFICATION_SERVICES,
@@ -44,6 +45,15 @@ export class Notification {
     };
   }
 
+  private static getNotificationMessage(type: NOTIFICATION_TYPES) {
+    switch (type) {
+      case NOTIFICATION_TYPES.sensors:
+        return `Температура вышла за пределы допустимых значений!\n\nВремя обнаружения: ${new Date().toLocaleString()}`;
+      case NOTIFICATION_TYPES.timeout:
+        return `Нет информация от датчиков!\n\nВремя обнаружения: ${new Date().toLocaleString()}`;
+    }
+  }
+
   static async app(type: NOTIFICATION_TYPES) {
     const notification = await Notification.repository.create({ type });
 
@@ -52,5 +62,12 @@ export class Notification {
 
   static async email(type: NOTIFICATION_TYPES) {}
 
-  static async telegram(type: NOTIFICATION_TYPES) {}
+  static async telegram(type: NOTIFICATION_TYPES) {
+    const bot = new Telegraf(String(process.env.TELEGRAM_TOKEN));
+
+    bot.telegram.sendMessage(
+      Number(process.env.TELEGRAM_CHANEL_ID),
+      Notification.getNotificationMessage(type),
+    );
+  }
 }
