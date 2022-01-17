@@ -9,9 +9,10 @@ export class CronJob {
       const data = await Meteo.getMeteoData();
 
       Meteo.store(data);
-      Alarm.check();
     } catch (error) {
       console.log('Error while receiving meteo data: ', error);
     }
+
+    Alarm.check();
   }
 }

@@ -2,7 +2,7 @@ import { Meteo } from '../Meteo';
 import { IMeteoControllerData } from '../MeteoController';
 import { IReadSettings, Settings } from '../Settings';
 import { Notification } from '../Notification';
-import { NOTIFICATION_TYPES } from '../../constants';
+import { NOTIFICATION_SERVICES, NOTIFICATION_TYPES } from '../../constants';
 
 const SECONDS_IN_MINUTE = 60;
 const SECONDS_IN_HOUR = SECONDS_IN_MINUTE * 60;
@@ -46,20 +46,35 @@ export class Alarm {
 
     if (Alarm.isAlarmAvailable(settings.tbtwnalarms)) {
       const data = await Meteo.getLastSensorsData();
+      const [lastSensorData] = data;
 
       data.forEach((meteo) => {
         if (Alarm.isCriticalTemperature(meteo, settings)) {
-          Notification.create(NOTIFICATION_TYPES.sensors);
-
-          Alarm.lastAlarm = Alarm.datetime;
-        }
-
-        if (Alarm.isTimeoutAlarm(meteo, settings.timeout)) {
-          Notification.create(NOTIFICATION_TYPES.timeout);
+          Notification.create(
+            [
+              NOTIFICATION_SERVICES.app,
+              NOTIFICATION_SERVICES.email,
+              NOTIFICATION_SERVICES.telegram,
+            ],
+            NOTIFICATION_TYPES.sensors,
+          );
 
           Alarm.lastAlarm = Alarm.datetime;
         }
       });
+
+      if (Alarm.isTimeoutAlarm(lastSensorData, settings.timeout)) {
+        Notification.create(
+          [
+            NOTIFICATION_SERVICES.app,
+            NOTIFICATION_SERVICES.email,
+            NOTIFICATION_SERVICES.telegram,
+          ],
+          NOTIFICATION_TYPES.timeout,
+        );
+
+        Alarm.lastAlarm = Alarm.datetime;
+      }
     }
   }
 }
