@@ -1,6 +1,7 @@
 import { getRepository } from 'typeorm';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { Telegraf } from 'telegraf';
+import { createTransport } from 'nodemailer';
 
 import {
   NOTIFICATION_SERVICES,
@@ -60,7 +61,23 @@ export class Notification {
     await Notification.repository.save(notification);
   }
 
-  static async email(type: NOTIFICATION_TYPES) {}
+  static async email(type: NOTIFICATION_TYPES) {
+    const smtpTransport = createTransport({
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
+      auth: {
+        user: process.env.EMAIL_LOGIN,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    smtpTransport.sendMail({
+      from: process.env.EMAIL_FROM,
+      to: process.env.EMAIL_TO,
+      subject: 'Уведомление от метео сервера',
+      text: Notification.getNotificationMessage(type),
+    });
+  }
 
   static async telegram(type: NOTIFICATION_TYPES) {
     const bot = new Telegraf(String(process.env.TELEGRAM_TOKEN));

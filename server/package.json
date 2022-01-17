@@ -20,6 +20,7 @@
     "@types/express": "^4.17.13",
     "@types/node": "^16.11.7",
     "@types/node-cron": "^3.0.0",
+    "@types/nodemailer": "^6.4.4",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
     "eslint": "^8.2.0",
@@ -40,6 +41,7 @@
     "express": "^4.17.1",
     "net": "^1.0.2",
     "node-cron": "^3.0.0",
+    "nodemailer": "^6.7.2",
     "pg": "^8.7.1",
     "telegraf": "^4.6.0",
     "typeorm": "^0.2.40"
