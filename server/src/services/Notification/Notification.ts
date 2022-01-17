@@ -1,7 +1,11 @@
 import { getRepository } from 'typeorm';
 import { format, utcToZonedTime } from 'date-fns-tz';
 
-import { NOTIFICATION_TYPES, TIMEZONE } from '../../constants';
+import {
+  NOTIFICATION_SERVICES,
+  NOTIFICATION_TYPES,
+  TIMEZONE,
+} from '../../constants';
 import { Notifications as NotificationsEntity } from '../../entities';
 
 export class Notification {
@@ -9,10 +13,13 @@ export class Notification {
     return getRepository(NotificationsEntity);
   }
 
-  static async create(type: NOTIFICATION_TYPES) {
-    const notification = await Notification.repository.create({ type });
-
-    await Notification.repository.save(notification);
+  static async create(
+    services: Array<NOTIFICATION_SERVICES>,
+    type: NOTIFICATION_TYPES,
+  ) {
+    services.forEach((service) => {
+      Notification[service](type);
+    });
   }
 
   static async delete(id: number) {
@@ -36,4 +43,14 @@ export class Notification {
       time,
     };
   }
+
+  static async app(type: NOTIFICATION_TYPES) {
+    const notification = await Notification.repository.create({ type });
+
+    await Notification.repository.save(notification);
+  }
+
+  static async email(type: NOTIFICATION_TYPES) {}
+
+  static async telegram(type: NOTIFICATION_TYPES) {}
 }
